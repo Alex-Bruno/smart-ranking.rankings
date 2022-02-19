@@ -1,7 +1,8 @@
 import { RankingsService } from './rankings.service';
 import { Partida } from './interfaces/partida.interface';
 import { Controller, Logger } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { RankingResponse } from './interfaces/ranking-response.interface';
 
 const ackErrors: string[] = [];
 
@@ -10,7 +11,7 @@ export class RankingsController {
 
     constructor(
         private readonly rankingsService: RankingsService
-    ) {}
+    ) { }
 
     private readonly logger = new Logger(RankingsController.name);
 
@@ -48,4 +49,22 @@ export class RankingsController {
 
     }
 
+    @MessagePattern('consultar-rankings')
+    async consultarRankings(
+        @Payload() data: any,
+        @Ctx() context: RmqContext
+    ): Promise<RankingResponse[] | RankingResponse> {
+
+        const channel = context.getChannelRef();
+        const originalMsg = context.getMessage();
+
+        try {
+
+            const { idCategoria, dataRef } = data;
+
+            return await this.rankingsService.consultarRankings(idCategoria, dataRef);
+        } finally {
+            await channel.ack(originalMsg);
+        }
+    }
 }

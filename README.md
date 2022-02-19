@@ -40,6 +40,7 @@ npm install npm install @nestjs/mongoose mongoose
 npm install --save-dev @types/mongoose
 npm i @nestjs/config
 npm install moment-timezone
+npm install lodash
 
 ## Stay in touch
 
