@@ -39,6 +39,7 @@ npm install amqplib amqp-connection-manager
 npm install npm install @nestjs/mongoose mongoose
 npm install --save-dev @types/mongoose
 npm i @nestjs/config
+npm install moment-timezone
 
 ## Stay in touch
 
